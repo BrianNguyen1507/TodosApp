@@ -7,6 +7,8 @@ import 'package:path/path.dart';
 import 'package:todo/Database/Dbhelper.dart';
 import 'package:todo/pages/adding.dart';
 import 'package:todo/models/congviec.dart';
+import 'package:todo/services/DeleteTask.dart';
+import 'package:todo/services/MarkDoneTask.dart';
 import 'package:todo/theme/provider.dart';
 import 'package:todo/theme/theme.dart';
 
@@ -76,10 +78,10 @@ class _TodoSampleState extends State<TodoSample> {
               Switch(
                 thumbIcon: istoggle
                     ? const MaterialStatePropertyAll(
-                        Icon(Icons.dark_mode),
+                        Icon(Icons.dark_mode, color: Colors.purple,),
                       )
                     : const MaterialStatePropertyAll(
-                        Icon(Icons.light_mode),
+                        Icon(Icons.light_mode, color: Colors.amber,),
                       ),
                 activeColor: Colors.blue,
                 value:
@@ -146,20 +148,11 @@ class _TodoSampleState extends State<TodoSample> {
                                         ),
                                         TextButton(
                                           onPressed: () async {
-                                            final Database database =
-                                                await openDatabase(
-                                              join(await getDatabasesPath(),
-                                                  DBHelper.dbName),
-                                            );
-                                            await database.update(
-                                              DBHelper.taskTable,
-                                              {DBHelper.columnIsComplete: 1},
-                                              where: '${DBHelper.columnId} = ?',
-                                              whereArgs: [task[index].id],
-                                            );
+                                            await MarkDoneTask.markTaskAsDone(
+                                                task[index].id);
                                             Fluttertoast.showToast(
                                               msg:
-                                                  "Marked ${task[index].name} as done",
+                                                  "${task[index].name} marked as done",
                                               toastLength: Toast.LENGTH_SHORT,
                                               gravity: ToastGravity.CENTER,
                                               timeInSecForIosWeb: 1,
@@ -167,14 +160,10 @@ class _TodoSampleState extends State<TodoSample> {
                                               textColor: Colors.white,
                                               fontSize: 16,
                                             );
-
                                             setState(() {
                                               task.removeAt(index);
                                             });
-                                            _loadTasks();
-
-                                            Navigator.of(context)
-                                                .pop(); // Close the dialog
+                                            Navigator.of(context).pop();
                                           },
                                           child: const Text('Done'),
                                         ),
@@ -228,19 +217,8 @@ class _TodoSampleState extends State<TodoSample> {
                                               TextButton(
                                                 child: const Text('Yes'),
                                                 onPressed: () async {
-                                                  //join db
-                                                  final Database database =
-                                                      await openDatabase(join(
-                                                          await getDatabasesPath(),
-                                                          DBHelper.dbName));
-                                                  //del
-                                                  await database.delete(
-                                                    DBHelper.taskTable,
-                                                    where:
-                                                        '${DBHelper.columnId} = ?',
-                                                    whereArgs: [task[index].id],
-                                                  );
-                                                  //reload list
+                                                  await DeleteTask.deleteTask(
+                                                      task[index].id);
                                                   _loadTasks();
                                                   Fluttertoast.showToast(
                                                     msg:
