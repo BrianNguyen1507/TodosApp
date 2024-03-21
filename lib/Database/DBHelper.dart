@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:todo/models/congviec.dart';
@@ -51,7 +50,11 @@ class DBHelper {
   static Future<List<CongViec>> getTasks() async {
     final Database database = await initializeDatabase();
 
-    final List<Map<String, dynamic>> taskMaps = await database.query(taskTable);
+    final List<Map<String, dynamic>> taskMaps = await database.query(
+      taskTable,
+      where: '$columnIsComplete = ?',
+      whereArgs: [0],
+    );
 
     return taskMaps.map((taskMap) => CongViec.fromMap(taskMap)).toList();
   }

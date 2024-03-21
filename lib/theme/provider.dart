@@ -5,9 +5,7 @@ import 'package:todo/theme/theme.dart';
 class ThemeProvider with ChangeNotifier {
   ThemeData _themeData = lightmode;
   static const String _themePreferenceKey = 'themePreference';
-
   ThemeData get themeData => _themeData;
-
   ThemeProvider() {
     _loadTheme();
   }
@@ -28,17 +26,18 @@ class ThemeProvider with ChangeNotifier {
 
   set themeData(ThemeData themeData) {
     _themeData = themeData;
-    _saveThemePreference(themeData == lightmode ? 0 : 1);
+    _saveThemePreference(1);
     notifyListeners();
   }
 
   void toggleTheme() {
     if (_themeData == lightmode) {
       _themeData = darkmode;
+      _saveThemePreference(1);
     } else {
       _themeData = lightmode;
+      _saveThemePreference(0);
     }
-    _saveThemePreference(_themeData == lightmode ? 0 : 1);
     notifyListeners();
   }
 }
