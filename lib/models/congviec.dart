@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 
 class CongViec {
-  int id;
+  int? id;
   String name;
   String description;
   DateTime date;
@@ -10,7 +10,7 @@ class CongViec {
   bool isCompleted;
 
   CongViec({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.date,
@@ -41,10 +41,5 @@ class CongViec {
       priority: map['priority'],
       isCompleted: map['isCompleted'] == 1 ? true : false,
     );
-  }
-
-  @override
-  String toString() {
-    return "$name-${DateFormat('dd-MM-yyyy').format(date)} - $time";
   }
 }

@@ -12,12 +12,10 @@ class DBHelper {
   static const String columnTime = 'time';
   static const String columnPriority = 'priority';
   static const String columnIsComplete = 'isComplete';
-
   static Future<Database> initializeDatabase() async {
     final String path = await getDatabasesPath();
     final String databasePath = join(path, dbName);
 
-    // Open the database or create if it doesn't exist
     return await openDatabase(
       databasePath,
       version: 1,
@@ -55,7 +53,16 @@ class DBHelper {
       where: '$columnIsComplete = ?',
       whereArgs: [0],
     );
+    List<Map<String, dynamic>> mutableTaskMaps =
+        List<Map<String, dynamic>>.from(taskMaps);
 
-    return taskMaps.map((taskMap) => CongViec.fromMap(taskMap)).toList();
+    mutableTaskMaps.sort((a, b) {
+      DateTime dateA = DateTime.parse(a[columnDate] + ' ' + a[columnTime]);
+      DateTime dateB = DateTime.parse(b[columnDate] + ' ' + b[columnTime]);
+
+      return dateA.compareTo(dateB);
+    });
+
+    return mutableTaskMaps.map((taskMap) => CongViec.fromMap(taskMap)).toList();
   }
 }
