@@ -65,4 +65,25 @@ class DBHelper {
 
     return mutableTaskMaps.map((taskMap) => CongViec.fromMap(taskMap)).toList();
   }
+
+  static Future<List<CongViec>> CompletedTasks() async {
+    final Database database = await initializeDatabase();
+
+    final List<Map<String, dynamic>> taskMaps = await database.query(
+      taskTable,
+      where: '$columnIsComplete = ?',
+      whereArgs: [1],
+    );
+    List<Map<String, dynamic>> mutableTaskMaps =
+        List<Map<String, dynamic>>.from(taskMaps);
+
+    mutableTaskMaps.sort((a, b) {
+      DateTime dateA = DateTime.parse(a[columnDate] + ' ' + a[columnTime]);
+      DateTime dateB = DateTime.parse(b[columnDate] + ' ' + b[columnTime]);
+
+      return dateA.compareTo(dateB);
+    });
+
+    return mutableTaskMaps.map((taskMap) => CongViec.fromMap(taskMap)).toList();
+  }
 }
