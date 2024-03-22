@@ -4,23 +4,24 @@ import 'package:provider/provider.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:todo/services/AddTask.dart';
 import 'package:todo/theme/provider.dart';
 
-// ignore: must_be_immutable
 class AddSchedule extends StatefulWidget {
-  late List<CongViec> listAdded;
-
-  AddSchedule({super.key, required this.listAdded});
+  const AddSchedule({super.key});
 
   @override
   State<AddSchedule> createState() => _AddScheduleState();
 }
 
 class _AddScheduleState extends State<AddSchedule> {
-  final TextEditingController _controllerCv = TextEditingController();
+  late String _priority = 'Low';
+
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _discriptionController = TextEditingController();
   late DateTime selectedDate;
   late String selectedTime;
-
+  late List<CongViec> listAdded;
   @override
   void initState() {
     super.initState();
@@ -28,7 +29,8 @@ class _AddScheduleState extends State<AddSchedule> {
   }
 
   void resetDateTime() {
-    _controllerCv.clear();
+    _nameController.clear();
+    _discriptionController.clear();
     selectedDate = DateTime.now();
     selectedTime = DateFormat('kk:mm').format(DateTime.now());
   }
@@ -37,7 +39,7 @@ class _AddScheduleState extends State<AddSchedule> {
     DateTime? picker = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(2024, 3),
+      firstDate: DateTime.now(),
       lastDate: DateTime(2202),
     );
     if (picker != null && picker != selectedDate) {
@@ -48,14 +50,38 @@ class _AddScheduleState extends State<AddSchedule> {
   }
 
   Future<void> _selectedTime(BuildContext context) async {
-    final TimeOfDay? picked = await showTimePicker(
+    TimeOfDay currentTime = TimeOfDay.now();
+    TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: TimeOfDay.now(),
+      initialTime: currentTime,
     );
-    if (picked != null && picked != selectedTime) {
-      setState(() {
-        selectedTime = picked.format(context);
-      });
+    if (picked != null) {
+      DateTime now = DateTime.now();
+      DateTime selectedDateTime =
+          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
+      if (selectedDateTime.isAfter(now)) {
+        setState(() {
+          selectedTime = DateFormat('kk:mm').format(selectedDateTime);
+        });
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Warning"),
+              content: const Text("Invalid datetime, try again please"),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -85,7 +111,7 @@ class _AddScheduleState extends State<AddSchedule> {
               padding: const EdgeInsets.all(10),
               child: TextField(
                 autofocus: true,
-                controller: _controllerCv,
+                controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -95,6 +121,26 @@ class _AddScheduleState extends State<AddSchedule> {
                     ),
                   ),
                   hintText: 'what do you want to do?',
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: TextField(
+                controller: _discriptionController,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(
+                      width: 0.5,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  hintText: 'Description',
                   hintStyle: TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 18,
@@ -130,7 +176,7 @@ class _AddScheduleState extends State<AddSchedule> {
                             ),
                             TextSpan(
                               text:
-                                  DateFormat('dd-MM-yyyy').format(selectedDate),
+                                  DateFormat('yyyy-MM-dd').format(selectedDate),
                               style: const TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey,
@@ -167,7 +213,7 @@ class _AddScheduleState extends State<AddSchedule> {
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
-              padding: const EdgeInsets.only(bottom: 60, left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.grey),
@@ -223,66 +269,133 @@ class _AddScheduleState extends State<AddSchedule> {
                 ),
               ),
             ),
-            SizedBox(
-              height: 50,
-              width: double.infinity,
-              child: Expanded(
-                child: Container(
-                  color: Colors.transparent,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (_controllerCv.text.isNotEmpty) {
-                          final existingItemIndex = widget.listAdded.indexWhere(
-                              (item) => item.name == _controllerCv.text);
-                          if (existingItemIndex != -1) {
-                            widget.listAdded[existingItemIndex].date =
-                                selectedDate;
-                            widget.listAdded[existingItemIndex].time =
-                                selectedTime;
-                          } else {
-                            // List<CongViec> mutableList = List.from(
-                            //     widget.listAdded); // Create a mutable copy
-                            // mutableList.add(
-                            //   CongViec(
-                            //     _controllerCv.text,
-                            //     selectedDate,
-                            //     selectedTime,
-                            //   ),
-                            // );
-                            // widget.listAdded = mutableList;
-                          }
-                          // resetDateTime();
-                          // Navigator.pushReplacement(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => TodoSample(
-                          //       listTodo: List.from(widget.listAdded),
-                          //     ),
-                          //   ),
-                          // );
-                        } else {
-                          Fluttertoast.showToast(
-                            msg: 'Please fill your input todo name',
-                          );
-                        }
-                      });
-                    },
-                    child: const Text(
-                      "ADD",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+            Container(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  const Text(
+                    'Priority',
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: <Widget>[
+                          Radio<String>(
+                            value: 'High',
+                            groupValue: _priority,
+                            onChanged: (value) {
+                              setState(() {
+                                _priority = value!;
+                              });
+                            },
+                          ),
+                          const Text('High'),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Radio<String>(
+                            value: 'Medium',
+                            groupValue: _priority,
+                            onChanged: (value) {
+                              setState(() {
+                                _priority = value!;
+                              });
+                            },
+                          ),
+                          const Text('Medium'),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Radio<String>(
+                            value: 'Low',
+                            groupValue: _priority,
+                            onChanged: (value) {
+                              setState(() {
+                                _priority = value!;
+                              });
+                            },
+                          ),
+                          const Text('Low'),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
               ),
             ),
+            Container(
+              height: 50,
+              width: double.infinity,
+              color: Colors.transparent,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+                onPressed: () async {
+                  setState(() {
+                    if (selectedDate !=
+                            DateFormat('yyyy:MM:dd').format(DateTime.now()) ||
+                        selectedTime !=
+                            DateFormat('kk:mm').format(DateTime.now())) {
+                      if (_nameController.text.isNotEmpty &&
+                          _discriptionController.text.isNotEmpty) {
+                        CongViec newTask = CongViec(
+                          name: _nameController.text,
+                          description: _discriptionController.text,
+                          date: selectedDate,
+                          time: selectedTime,
+                          priority: _priority,
+                        );
+                        AddTask.addTask(newTask);
+                        resetDateTime();
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const TodoSample(),
+                          ),
+                        );
+                      } else {
+                        Fluttertoast.showToast(
+                          msg: "Please fill in all fields",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.blue,
+                          textColor: Colors.white,
+                          fontSize: 16,
+                        );
+                      }
+                    } else {
+                      // Show a message indicating that the selected time is the current time
+                      Fluttertoast.showToast(
+                        msg: "Please select a different time",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.blue,
+                        textColor: Colors.white,
+                        fontSize: 16,
+                      );
+                    }
+                  });
+                },
+                child: const Text(
+                  'ADD',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            )
           ],
         ),
       ),
