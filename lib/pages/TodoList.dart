@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path/path.dart';
 import 'package:todo/Database/Dbhelper.dart';
 import 'package:todo/pages/adding.dart';
 import 'package:todo/models/congviec.dart';
+import 'package:todo/pages/completedList.dart';
+import 'package:todo/pages/detail.dart';
 import 'package:todo/services/DeleteTask.dart';
 import 'package:todo/services/MarkDoneTask.dart';
 import 'package:todo/theme/provider.dart';
 import 'package:todo/theme/theme.dart';
 
 class TodoSample extends StatefulWidget {
-  const TodoSample({Key? key}) : super(key: key);
+  const TodoSample({super.key});
 
   @override
   State<TodoSample> createState() => _TodoSampleState();
@@ -36,75 +36,151 @@ class _TodoSampleState extends State<TodoSample> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
-        onPressed: () async {
-          //   final itemnew = await Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) =>  AddSchedule(),
-          //     ),
-          //   );
-          //   if (itemnew != null) {
-          //     setState(() {
-          //       _tasks = DBHelper.getTasks(); // Refresh tasks after adding
-          //     });
-          //   }
-        },
-      ),
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: Provider.of<ThemeProvider>(context)
-            .themeData
-            .appBarTheme
-            .backgroundColor,
-        title: const Text(
-          "TO DO LIST",
-          style: TextStyle(
-            color: Colors.blue,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
+    return RefreshIndicator(
+      color: Colors.blue,
+      onRefresh: _onRefresh,
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
           ),
+          onPressed: () async {
+            final itemnew = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AddSchedule(),
+              ),
+            );
+            if (itemnew != null) {
+              setState(() {
+                _tasks = DBHelper.getTasks();
+              });
+            }
+          },
         ),
-        actions: [
-          Row(
-            children: [
-              Switch(
-                thumbIcon: istoggle
-                    ? const MaterialStatePropertyAll(
-                        Icon(Icons.dark_mode, color: Colors.purple,),
-                      )
-                    : const MaterialStatePropertyAll(
-                        Icon(Icons.light_mode, color: Colors.amber,),
-                      ),
-                activeColor: Colors.blue,
-                value:
-                    Provider.of<ThemeProvider>(context).themeData == darkmode,
-                onChanged: (value) {
-                  istoggle = !istoggle;
-                  Provider.of<ThemeProvider>(context, listen: false)
-                      .toggleTheme();
+        appBar: AppBar(
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: const Icon(Icons.menu),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              );
+            },
+          ),
+          centerTitle: true,
+          elevation: 0.0,
+          automaticallyImplyLeading: false,
+          backgroundColor: Provider.of<ThemeProvider>(context)
+              .themeData
+              .appBarTheme
+              .backgroundColor,
+          title: const Text(
+            "TO DO LIST",
+            style: TextStyle(
+              color: Colors.blue,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                Switch(
+                  thumbIcon: istoggle
+                      ? const MaterialStatePropertyAll(
+                          Icon(
+                            Icons.light_mode,
+                            color: Colors.yellow,
+                          ),
+                        )
+                      : const MaterialStatePropertyAll(
+                          Icon(
+                            Icons.dark_mode,
+                            color: Colors.white,
+                          ),
+                        ),
+                  activeColor: Colors.blue,
+                  value:
+                      Provider.of<ThemeProvider>(context).themeData == darkmode,
+                  onChanged: (value) {
+                    istoggle = !istoggle;
+                    Provider.of<ThemeProvider>(context, listen: false)
+                        .toggleTheme();
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              const DrawerHeader(
+                curve: Curves.bounceInOut,
+                decoration: BoxDecoration(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                        child: Text(
+                      'You are wonderful',
+                      style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.blue),
+                    )),
+                    Center(
+                        child: Text(
+                      'Have a nice day!!!',
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.amber),
+                    )),
+                  ],
+                ),
+              ),
+              ListTile(
+                title: const Text(
+                  'TODO LIST',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const TodoSample(),
+                  ));
+                },
+              ),
+              ListTile(
+                title: const Text(
+                  'COMPLETED LIST',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                ),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const CompletedList(),
+                  ));
                 },
               ),
             ],
-          )
-        ],
-      ),
-      body: Container(
-        color: Colors.transparent,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: double.infinity,
-                child: Container(
+          ),
+        ),
+        body: Container(
+          color: Colors.transparent,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: double.infinity,
                   child: FutureBuilder<List<CongViec>>(
                     future: _tasks,
                     builder: (context, snapshot) {
@@ -121,130 +197,167 @@ class _TodoSampleState extends State<TodoSample> {
                           itemCount: task.length,
                           itemBuilder: (BuildContext context, index) {
                             return Dismissible(
-                              key: Key(task[index].id.toString()),
-                              direction: DismissDirection.endToStart,
-                              background: Container(
-                                alignment: Alignment.centerRight,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                color: Colors.green,
-                                child:
-                                    const Icon(Icons.done, color: Colors.white),
-                              ),
-                              onDismissed: (direction) async {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text(
-                                          "Mark ${task[index].name} as done?"),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                            _loadTasks();
-                                          },
-                                          child: const Text('Not yet'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () async {
-                                            await MarkDoneTask.markTaskAsDone(
-                                                task[index].id);
-                                            Fluttertoast.showToast(
-                                              msg:
-                                                  "${task[index].name} marked as done",
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.CENTER,
-                                              timeInSecForIosWeb: 1,
-                                              backgroundColor: Colors.green,
-                                              textColor: Colors.white,
-                                              fontSize: 16,
-                                            );
-                                            setState(() {
-                                              task.removeAt(index);
-                                            });
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('Done'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              child: GestureDetector(
-                                child: Card(
-                                  borderOnForeground: true,
-                                  color: Colors.grey.shade900,
-                                  elevation: 1,
-                                  child: ListTile(
-                                    title: Text(
-                                      task[index].name,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
-                                    ),
-                                    subtitle: Text(
-                                      'Date: ${DateFormat('dd-MM-yyyy').format(task[index].date)} | Time: ${task[index].time}',
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    onTap: () {
-                                      // setState(() {
-                                      //   _controllerCv.text = _task[index].name;
-                                      //   selectedDate = _task[index].date;
-                                      //   selectedTime = _task[index].time;
-                                      // });
-                                    },
-                                    onLongPress: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text(
-                                                "Do you want to remove?"),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('No'),
-                                              ),
-                                              TextButton(
-                                                child: const Text('Yes'),
-                                                onPressed: () async {
-                                                  await DeleteTask.deleteTask(
-                                                      task[index].id);
-                                                  _loadTasks();
-                                                  Fluttertoast.showToast(
-                                                    msg:
-                                                        "Removed ${task[index].name}",
-                                                    toastLength:
-                                                        Toast.LENGTH_SHORT,
-                                                    gravity:
-                                                        ToastGravity.CENTER,
-                                                    timeInSecForIosWeb: 1,
-                                                    backgroundColor:
-                                                        Colors.blue,
-                                                    textColor: Colors.white,
-                                                    fontSize: 16,
-                                                  );
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ],
-                                          );
-                                        },
+                                movementDuration:
+                                    const Duration(milliseconds: 200),
+                                key: Key(task[index].id.toString()),
+                                direction: DismissDirection.endToStart,
+                                background: Container(
+                                  alignment: Alignment.centerRight,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  color: Colors.green,
+                                  child: const Icon(Icons.done,
+                                      color: Colors.white),
+                                ),
+                                onDismissed: (direction) async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                            "Mark ${task[index].name} as done?"),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                              _loadTasks();
+                                            },
+                                            child: const Text('Not yet'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () async {
+                                              await MarkDoneTask.markTaskAsDone(
+                                                task[index].id!
+                                              );
+
+                                              Fluttertoast.showToast(
+                                                msg:
+                                                    "${task[index].name} moving to Completed list",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.CENTER,
+                                                timeInSecForIosWeb: 1,
+                                                backgroundColor: Colors.green,
+                                                textColor: Colors.white,
+                                                fontSize: 16,
+                                              );
+                                              setState(() {
+                                                task.removeAt(index);
+                                              });
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text('Done'),
+                                          ),
+                                        ],
                                       );
                                     },
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 2.0, right: 2.0, top: 1, bottom: 1),
+                                  child: GestureDetector(
+                                    child: Card(
+                                      borderOnForeground: true,
+                                      color: Colors.grey.shade900,
+                                      elevation: 1,
+                                      child: ListTile(
+                                        title: Text(
+                                          task[index].name,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        subtitle: Text(
+                                          'Date: ${DateFormat('yyyy-MM-dd').format(task[index].date)} | Time: ${(task[index].time)}',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        trailing: Container(
+                                          height: 24,
+                                          width: 24,
+                                          decoration: BoxDecoration(
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey
+                                                    .withOpacity(0.1),
+                                                spreadRadius: 5,
+                                                blurRadius: 4,
+                                                offset: const Offset(0, 3),
+                                              ),
+                                            ],
+                                            shape: BoxShape.circle,
+                                            color:
+                                                task[index].priority == 'High'
+                                                    ? Colors.red
+                                                    : task[index].priority ==
+                                                            'Medium'
+                                                        ? Colors.yellow
+                                                        : Colors.blue,
+                                          ),
+                                        ),
+                                        onTap: () {
+                                          setState(() {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DetailPage(
+                                                        task: task[index]),
+                                              ),
+                                            );
+                                          });
+                                        },
+                                        onLongPress: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (BuildContext context) {
+                                              return AlertDialog(
+                                                title: const Text(
+                                                    "Do you want to remove?"),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                    child: const Text('No'),
+                                                  ),
+                                                  TextButton(
+                                                    child: const Text('Yes'),
+                                                    onPressed: () async {
+                                                      await DeleteTask
+                                                          .deleteTask(
+                                                              task[index].id!);
+                                                      _loadTasks();
+                                                      Fluttertoast.showToast(
+                                                        msg:
+                                                            "Removed ${task[index].name}",
+                                                        toastLength:
+                                                            Toast.LENGTH_SHORT,
+                                                        gravity:
+                                                            ToastGravity.CENTER,
+                                                        timeInSecForIosWeb: 1,
+                                                        backgroundColor:
+                                                            Colors.blue,
+                                                        textColor: Colors.white,
+                                                        fontSize: 16,
+                                                      );
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    },
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            );
+                                ));
                           },
                         );
                       }
@@ -252,10 +365,16 @@ class _TodoSampleState extends State<TodoSample> {
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+}
+
+Future<void> _onRefresh() async {
+  return await Future.delayed(
+    const Duration(milliseconds: 100),
+  );
 }
