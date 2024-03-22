@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/models/congviec.dart';
-import 'package:todo/pages/expandableText_widget.dart';
+import 'package:todo/pages/update.dart';
+
 import 'package:todo/theme/provider.dart';
 
 class DetailPage extends StatefulWidget {
@@ -25,8 +26,22 @@ class _DetailPageState extends State<DetailPage> {
         title: Text(
           widget.task.name,
           style: const TextStyle(
-              fontSize: 30, fontWeight: FontWeight.bold, color: Colors.blue),
+              fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.edit,
+            ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => UpdatePage(
+                  taskToUpdate: widget.task,
+                ),
+              ));
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -44,14 +59,13 @@ class _DetailPageState extends State<DetailPage> {
                     children: [
                       Container(
                         height: 50,
-                        width: 100,
+                        padding: const EdgeInsets.all(10),
                         margin: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-
                           color: widget.task.isCompleted
                               ? Colors.green
-                              : Colors.orange, // Moved color property here
+                              : Colors.orange,
                         ),
                         child: Center(
                           child: widget.task.isCompleted
@@ -72,8 +86,8 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       Container(
+                        padding: const EdgeInsets.all(10),
                         height: 50,
-                        width: 50,
                         margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
@@ -118,7 +132,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                               ),
                               Text(
-                                ' ${DateFormat('dd-MM-yyyy').format(widget.task.date)} ',
+                                ' ${DateFormat('yyyy-MM-dd').format(widget.task.date)} ',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,
@@ -170,9 +184,11 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       subtitle: Center(
-                        child:
-                            ExpandableWidget(content: widget.task.description),
-                      ),
+                          child: Text(widget.task.description,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                              ))),
                     ),
                   ),
                 ],
