@@ -23,3 +23,4 @@ Completed task list: Users can view completed lists by sliding the checkmark in 
 Follow these steps to get started with the project:
 1. Clone the repository
 Clone this repository to your local machine with the following command:
+https://github.com/BrianNguyen1507/TodoApp.git
