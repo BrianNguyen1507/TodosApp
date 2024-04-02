@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/Notification/ScheduleNotifications.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:todo/services/AddTask.dart';
 import 'package:todo/services/updateTask.dart';
 import 'package:todo/theme/provider.dart';
 
@@ -344,6 +344,7 @@ class _UpdatePageState extends State<UpdatePage> {
                   backgroundColor: Colors.blue,
                 ),
                 onPressed: () async {
+                  scheduleAndCreateNotifications();
                   if (selectedDate !=
                           DateFormat('yyyy-MM-dd').format(DateTime.now()) ||
                       selectedTime !=

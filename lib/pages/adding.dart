@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/Notification/ScheduleNotifications.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -340,6 +341,7 @@ class _AddScheduleState extends State<AddSchedule> {
                   backgroundColor: Colors.blue,
                 ),
                 onPressed: () async {
+                  scheduleAndCreateNotifications();
                   setState(() {
                     if (selectedDate !=
                             DateFormat('yyyy:MM:dd').format(DateTime.now()) ||
