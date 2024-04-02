@@ -1,9 +1,8 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:todo/models/congviec.dart';
-
 class DBHelper {
-  static const String dbName = 'my_database.db';
+  static const String dbName = 'todos.db';
   static const String taskTable = 'task';
   static const String columnId = 'id';
   static const String columnName = 'name';
@@ -12,11 +11,14 @@ class DBHelper {
   static const String columnTime = 'time';
   static const String columnPriority = 'priority';
   static const String columnIsComplete = 'isComplete';
+
+  static late Database _database;
+
+  // Phương thức để khởi tạo cơ sở dữ liệu
   static Future<Database> initializeDatabase() async {
     final String path = await getDatabasesPath();
     final String databasePath = join(path, dbName);
-
-    return await openDatabase(
+    _database = await openDatabase(
       databasePath,
       version: 1,
       onCreate: (db, version) async {
@@ -33,6 +35,10 @@ class DBHelper {
         ''');
       },
     );
+    return _database;
+  }
+  static Future<Database> get database async {
+    return _database;
   }
 
   static Future<void> insertTask(Map<String, dynamic> task) async {
@@ -66,6 +72,7 @@ class DBHelper {
     return mutableTaskMaps.map((taskMap) => CongViec.fromMap(taskMap)).toList();
   }
 
+  //Completed task
   static Future<List<CongViec>> CompletedTasks() async {
     final Database database = await initializeDatabase();
 
