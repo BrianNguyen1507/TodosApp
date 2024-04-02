@@ -1,7 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo/Notification/ScheduleNotifications.dart';
 import 'package:todo/pages/TodoList.dart';
+
 import 'package:todo/theme/provider.dart';
 import 'package:todo/Database/Dbhelper.dart';
 
@@ -9,7 +12,8 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initializeDatabase();
   await SharedPreferences.getInstance(); // save viewmode
-
+  await initializeLocalNotifications(); // notification
+  scheduleAndCreateNotifications();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
@@ -18,8 +22,44 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+Future<void> initializeLocalNotifications() async {
+  await AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'alerts',
+        channelName: 'Alerts',
+        channelDescription: 'Notification tests as alerts',
+        playSound: true,
+        onlyAlertOnce: true,
+        groupAlertBehavior: GroupAlertBehavior.Children,
+        importance: NotificationImportance.High,
+        defaultPrivacy: NotificationPrivacy.Private,
+        defaultColor: Colors.deepPurple,
+        ledColor: Colors.deepPurple,
+      )
+    ],
+    debug: true,
+  );
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
