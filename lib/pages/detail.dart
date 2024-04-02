@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/update.dart';
 
@@ -26,7 +27,9 @@ class _DetailPageState extends State<DetailPage> {
         title: Text(
           widget.task.name,
           style: const TextStyle(
-              fontSize: 25, fontWeight: FontWeight.bold, color: Colors.blue),
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              color: AppColors.title),
         ),
         actions: [
           IconButton(
@@ -64,22 +67,22 @@ class _DetailPageState extends State<DetailPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: widget.task.isCompleted
-                              ? Colors.green
-                              : Colors.orange,
+                              ? AppColors.done
+                              : AppColors.medium,
                         ),
                         child: Center(
                           child: widget.task.isCompleted
                               ? const Text(
                                   'Done',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 )
                               : const Text(
                                   'Pending',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -92,10 +95,10 @@ class _DetailPageState extends State<DetailPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: widget.task.priority == 'High'
-                              ? Colors.red
+                              ? AppColors.high
                               : widget.task.priority == 'Medium'
-                                  ? Colors.yellow
-                                  : Colors.blue,
+                                  ? AppColors.medium
+                                  : AppColors.low,
                         ),
                         child: Center(
                           child: Text(

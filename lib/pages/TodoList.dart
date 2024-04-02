@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/Database/Dbhelper.dart';
+import 'package:todo/constant/colors.dart';
 import 'package:todo/pages/adding.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/completedList.dart';
@@ -294,11 +295,11 @@ class _TodoSampleState extends State<TodoSample> {
                                                 shape: BoxShape.circle,
                                                 color: task[index].priority ==
                                                         'High'
-                                                    ? Colors.red
+                                                    ? AppColors.high
                                                     : task[index].priority ==
                                                             'Medium'
-                                                        ? Colors.yellow
-                                                        : Colors.blue,
+                                                        ? AppColors.medium
+                                                        : AppColors.low,
                                               ),
                                             ),
                                             const SizedBox(width: 10),
@@ -313,14 +314,14 @@ class _TodoSampleState extends State<TodoSample> {
                                                           Radius.circular(20)),
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.grey
+                                                      color: AppColors.grey
                                                           .withOpacity(0.1),
                                                       offset:
                                                           const Offset(0, 3),
                                                     ),
                                                   ],
                                                   shape: BoxShape.rectangle,
-                                                  color: Colors.orangeAccent,
+                                                  color: AppColors.delayed,
                                                 ),
                                                 child: const Padding(
                                                   padding: EdgeInsets.all(5.0),
@@ -372,8 +373,9 @@ class _TodoSampleState extends State<TodoSample> {
                                                             ToastGravity.CENTER,
                                                         timeInSecForIosWeb: 1,
                                                         backgroundColor:
-                                                            Colors.blue,
-                                                        textColor: Colors.white,
+                                                            AppColors.blue,
+                                                        textColor:
+                                                            AppColors.white,
                                                         fontSize: 16,
                                                       );
                                                       Navigator.of(context)

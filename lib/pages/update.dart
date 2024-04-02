@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/Notification/ScheduleNotifications.dart';
+import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -101,7 +102,7 @@ class _UpdatePageState extends State<UpdatePage> {
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back,
-            color: Colors.blue,
+            color: AppColors.arrow,
           ),
           onPressed: () {
             Navigator.pop(context);
@@ -121,7 +122,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(
                       width: 0.5,
-                      color: Colors.grey,
+                      color: AppColors.grey,
                     ),
                   ),
                   hintText: 'what do you want to do?',
@@ -141,7 +142,7 @@ class _UpdatePageState extends State<UpdatePage> {
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(
                       width: 0.5,
-                      color: Colors.grey,
+                      color: AppColors.grey,
                     ),
                   ),
                   hintText: 'Description',
@@ -159,7 +160,7 @@ class _UpdatePageState extends State<UpdatePage> {
               padding: const EdgeInsets.all(10),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
+                  border: Border.all(color: AppColors.grey),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Padding(
@@ -173,7 +174,7 @@ class _UpdatePageState extends State<UpdatePage> {
                             const TextSpan(
                               text: "Date:   ",
                               style: TextStyle(
-                                color: Colors.blue,
+                                color: AppColors.title,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -183,7 +184,7 @@ class _UpdatePageState extends State<UpdatePage> {
                                   DateFormat('yyyy-MM-dd').format(selectedDate),
                               style: const TextStyle(
                                 fontSize: 18,
-                                color: Colors.grey,
+                                color: AppColors.subtitle,
                                 fontWeight: FontWeight.bold,
                               ),
                             )
@@ -192,7 +193,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       ),
                       Container(
                         decoration: const BoxDecoration(
-                          color: Colors.blue,
+                          color: AppColors.button,
                           borderRadius: BorderRadius.all(
                             Radius.circular(15),
                           ),
@@ -200,7 +201,7 @@ class _UpdatePageState extends State<UpdatePage> {
                         child: MaterialButton(
                           child: const Icon(
                             Icons.calendar_today,
-                            color: Colors.white,
+                            color: AppColors.white,
                             size: 30,
                           ),
                           onPressed: () {
@@ -220,7 +221,7 @@ class _UpdatePageState extends State<UpdatePage> {
               padding: const EdgeInsets.only(left: 10, right: 10),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
+                  border: Border.all(color: AppColors.grey),
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Padding(
@@ -234,7 +235,7 @@ class _UpdatePageState extends State<UpdatePage> {
                             const TextSpan(
                               text: "Time:   ",
                               style: TextStyle(
-                                color: Colors.blue,
+                                color: AppColors.title,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -242,7 +243,7 @@ class _UpdatePageState extends State<UpdatePage> {
                             TextSpan(
                               text: selectedTime,
                               style: const TextStyle(
-                                color: Colors.grey,
+                                color: AppColors.subtitle,
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -252,7 +253,7 @@ class _UpdatePageState extends State<UpdatePage> {
                       ),
                       Container(
                         decoration: const BoxDecoration(
-                          color: Colors.blue,
+                          color: AppColors.title,
                           borderRadius: BorderRadius.all(
                             Radius.circular(15),
                           ),
@@ -260,7 +261,7 @@ class _UpdatePageState extends State<UpdatePage> {
                         child: MaterialButton(
                           child: const Icon(
                             Icons.av_timer_rounded,
-                            color: Colors.white,
+                            color: AppColors.white,
                             size: 40,
                           ),
                           onPressed: () {
@@ -280,7 +281,7 @@ class _UpdatePageState extends State<UpdatePage> {
                   const Text(
                     'Priority',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: AppColors.title,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -341,7 +342,7 @@ class _UpdatePageState extends State<UpdatePage> {
               color: Colors.transparent,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
+                  backgroundColor: AppColors.button,
                 ),
                 onPressed: () async {
                   scheduleAndCreateNotifications();
@@ -373,8 +374,8 @@ class _UpdatePageState extends State<UpdatePage> {
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.CENTER,
                         timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.blue,
-                        textColor: Colors.white,
+                        backgroundColor: AppColors.blue,
+                        textColor: AppColors.white,
                         fontSize: 16,
                       );
                     }
@@ -384,8 +385,8 @@ class _UpdatePageState extends State<UpdatePage> {
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.blue,
-                      textColor: Colors.white,
+                      backgroundColor: AppColors.blue,
+                      textColor: AppColors.white,
                       fontSize: 16,
                     );
                   }
@@ -393,7 +394,7 @@ class _UpdatePageState extends State<UpdatePage> {
                 child: const Text(
                   'Update',
                   style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.bold),
                 ),

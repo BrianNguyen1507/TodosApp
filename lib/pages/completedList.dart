@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/Database/Dbhelper.dart';
+import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/services/DeleteTask.dart';
 import 'package:todo/theme/provider.dart';
@@ -33,7 +34,7 @@ class _CompletedListState extends State<CompletedList> {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
-      color: Colors.blue,
+      color: AppColors.blue,
       onRefresh: _onRefresh,
       child: Scaffold(
         appBar: AppBar(
@@ -47,7 +48,7 @@ class _CompletedListState extends State<CompletedList> {
           title: const Text(
             "COMPLETED",
             style: TextStyle(
-              color: Colors.blue,
+              color: AppColors.blue,
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
@@ -60,7 +61,7 @@ class _CompletedListState extends State<CompletedList> {
                       ? const WidgetStatePropertyAll(
                           Icon(
                             Icons.light_mode,
-                            color: Colors.yellow,
+                            color: AppColors.yellow,
                           ),
                         )
                       : const WidgetStatePropertyAll(
@@ -69,7 +70,7 @@ class _CompletedListState extends State<CompletedList> {
                             color: Colors.white,
                           ),
                         ),
-                  activeColor: Colors.blue,
+                  activeColor: AppColors.blue,
                   value:
                       Provider.of<ThemeProvider>(context).themeData == darkmode,
                   onChanged: (value) {
@@ -114,12 +115,11 @@ class _CompletedListState extends State<CompletedList> {
                                 alignment: Alignment.centerRight,
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 20),
-                                color: Colors.red,
+                                color: AppColors.delete,
                                 child: const Icon(Icons.remove_circle,
                                     color: Colors.white),
                               ),
                               onDismissed: (direction) async {
-                                print(task[index].isCompleted);
                                 showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
@@ -138,8 +138,8 @@ class _CompletedListState extends State<CompletedList> {
                                               toastLength: Toast.LENGTH_SHORT,
                                               gravity: ToastGravity.CENTER,
                                               timeInSecForIosWeb: 1,
-                                              backgroundColor: Colors.blue,
-                                              textColor: Colors.white,
+                                              backgroundColor: AppColors.blue,
+                                              textColor: AppColors.white,
                                               fontSize: 16,
                                             );
                                             Navigator.of(context).pop();
@@ -164,14 +164,14 @@ class _CompletedListState extends State<CompletedList> {
                                 child: GestureDetector(
                                   child: Card(
                                     borderOnForeground: true,
-                                    color: Colors.blue[900],
+                                    color: AppColors.grey,
                                     elevation: 1,
                                     child: ListTile(
                                       title: Text(
                                         task[index].name,
                                         style: const TextStyle(
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          color: AppColors.white,
                                           fontSize: 18,
                                         ),
                                       ),
@@ -179,7 +179,7 @@ class _CompletedListState extends State<CompletedList> {
                                         'Date: ${DateFormat('yyyy-MM-dd').format(task[index].date)} | Time: ${(task[index].time)}',
                                         style: const TextStyle(
                                           fontSize: 18,
-                                          color: Colors.white,
+                                          color: AppColors.white,
                                         ),
                                       ),
                                       trailing: Container(
@@ -190,7 +190,7 @@ class _CompletedListState extends State<CompletedList> {
                                                     Radius.circular(10)),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: Colors.grey
+                                                color: AppColors.grey
                                                     .withOpacity(0.1),
                                                 spreadRadius: 5,
                                                 blurRadius: 4,
@@ -198,7 +198,7 @@ class _CompletedListState extends State<CompletedList> {
                                               ),
                                             ],
                                             shape: BoxShape.rectangle,
-                                            color: Colors.green),
+                                            color: AppColors.done),
                                         child: const Text('Done'),
                                       ),
                                     ),
