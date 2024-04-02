@@ -5,16 +5,6 @@ Welcome to the TODO APP exercise! In this project, you will create a small appli
 ## Project Overview
 
 This exercise is intended to help you practice your skills in Flutter, Dart, and using SQLite to store data. The application should have the following key features:
-## GIFs
-You can see the app's functions in the following GIFs:
-### Add new task
-![Animated GIF](TodosApp/assets/images/add.gif)
-### Mark done task
-![Animated GIF](TodosApp/assets/images/markdone.gif)
-### Update task
-![Animated GIF](TodosApp/assets/images/update.gif)
-### View mode
-![Animated GIF](assets/images/viewmode.gif)
 
 
 ### Home Page
