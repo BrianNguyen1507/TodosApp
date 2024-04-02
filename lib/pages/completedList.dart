@@ -57,13 +57,13 @@ class _CompletedListState extends State<CompletedList> {
               children: [
                 Switch(
                   thumbIcon: istoggle
-                      ? const MaterialStatePropertyAll(
+                      ? const WidgetStatePropertyAll(
                           Icon(
                             Icons.light_mode,
                             color: Colors.yellow,
                           ),
                         )
-                      : const MaterialStatePropertyAll(
+                      : const WidgetStatePropertyAll(
                           Icon(
                             Icons.dark_mode,
                             color: Colors.white,

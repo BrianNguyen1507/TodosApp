@@ -22,6 +22,7 @@ class TodoSample extends StatefulWidget {
 class _TodoSampleState extends State<TodoSample> {
   late Future<List<CongViec>> _tasks;
   bool istoggle = false;
+
   @override
   void initState() {
     super.initState();
@@ -193,6 +194,7 @@ class _TodoSampleState extends State<TodoSample> {
                             child: Text('No Schedule available'));
                       } else {
                         final task = snapshot.data!;
+
                         return ListView.builder(
                           itemCount: task.length,
                           itemBuilder: (BuildContext context, index) {
@@ -227,8 +229,7 @@ class _TodoSampleState extends State<TodoSample> {
                                           TextButton(
                                             onPressed: () async {
                                               await MarkDoneTask.markTaskAsDone(
-                                                task[index].id!
-                                              );
+                                                  task[index].id!);
 
                                               Fluttertoast.showToast(
                                                 msg:
@@ -276,28 +277,58 @@ class _TodoSampleState extends State<TodoSample> {
                                             color: Colors.white,
                                           ),
                                         ),
-                                        trailing: Container(
-                                          height: 24,
-                                          width: 24,
-                                          decoration: BoxDecoration(
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.grey
-                                                    .withOpacity(0.1),
-                                                spreadRadius: 5,
-                                                blurRadius: 4,
-                                                offset: const Offset(0, 3),
-                                              ),
-                                            ],
-                                            shape: BoxShape.circle,
-                                            color:
-                                                task[index].priority == 'High'
+                                        trailing: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Container(
+                                              height: 24,
+                                              width: 24,
+                                              decoration: BoxDecoration(
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color: Colors.grey
+                                                        .withOpacity(0.1),
+                                                    offset: const Offset(0, 3),
+                                                  ),
+                                                ],
+                                                shape: BoxShape.circle,
+                                                color: task[index].priority ==
+                                                        'High'
                                                     ? Colors.red
                                                     : task[index].priority ==
                                                             'Medium'
                                                         ? Colors.yellow
                                                         : Colors.blue,
-                                          ),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 10),
+                                            Visibility(
+                                              visible: DateTime.parse(
+                                                      '${DateFormat('yyyy-MM-dd').format(task[index].date)} ${task[index].time}')
+                                                  .isBefore(DateTime.now()),
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.grey
+                                                          .withOpacity(0.1),
+                                                      offset:
+                                                          const Offset(0, 3),
+                                                    ),
+                                                  ],
+                                                  shape: BoxShape.rectangle,
+                                                  color: Colors.orangeAccent,
+                                                ),
+                                                child: const Padding(
+                                                  padding: EdgeInsets.all(5.0),
+                                                  child: Text('Delayed'),
+                                                ),
+                                              ),
+                                            )
+                                          ],
                                         ),
                                         onTap: () {
                                           setState(() {
