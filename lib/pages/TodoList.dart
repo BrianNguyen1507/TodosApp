@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,6 +24,7 @@ class TodoSample extends StatefulWidget {
 }
 
 class _TodoSampleState extends State<TodoSample> {
+  late Timer _timer;
   HandleDateTime handleDateTime = HandleDateTime();
   late Future<List<CongViec>> _tasks;
   bool istoggle = false;
@@ -30,6 +33,15 @@ class _TodoSampleState extends State<TodoSample> {
   void initState() {
     super.initState();
     _loadTasks();
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   Future<void> _loadTasks() async {
@@ -261,198 +273,241 @@ class _TodoSampleState extends State<TodoSample> {
                                     left: 2.0, right: 2.0, top: 1, bottom: 1),
                                 child: GestureDetector(
                                   child: Card(
-                                    borderOnForeground: true,
-                                    color: Colors.grey.shade900,
-                                    elevation: 1,
-                                    child: ListTile(
-                                      title: Text(
-                                        task[index].name,
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
-                                          fontSize: 18,
-                                        ),
-                                      ),
-                                      subtitle: Column(
+                                      borderOnForeground: true,
+                                      color: Colors.grey.shade900,
+                                      elevation: 1,
+                                      child: ListTile(
+                                        title: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              'Date: ${DateFormat('yyy y-MM-dd').format(task[index].date)}',
+                                              task[index].name,
                                               style: const TextStyle(
-                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
                                                 color: Colors.white,
-                                              ),
-                                            ),
-                                            Text(
-                                              'Time: ${task[index].time}',
-                                              style: const TextStyle(
                                                 fontSize: 18,
-                                                color: Colors.white,
                                               ),
                                             ),
-                                          ]),
-                                      trailing: Column(
-                                        children: [
-                                          Text(
-                                            handleDateTime
-                                                        .calculateDelayInMinutes(
-                                                            task[index].date,
-                                                            task[index].time) >
-                                                    0
-                                                ? 'delay ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time)} minutes ago'
-                                                : 'remaining ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time).abs()} minutes',
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          Row(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Container(
-                                                height: 24,
-                                                width: 24,
-                                                decoration: BoxDecoration(
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color: Colors.grey
-                                                          .withOpacity(0.1),
-                                                      offset:
-                                                          const Offset(0, 3),
-                                                    ),
-                                                  ],
-                                                  shape: BoxShape.circle,
-                                                  color: task[index].priority ==
-                                                          'High'
-                                                      ? AppColors.high
-                                                      : task[index].priority ==
-                                                              'Medium'
-                                                          ? AppColors.medium
-                                                          : AppColors.low,
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Visibility(
-                                                visible: handleDateTime
-                                                        .calculateDelayInMinutes(
-                                                            task[index].date,
-                                                            task[index].time) >
-                                                    0,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                5.0)),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: AppColors.grey
-                                                            .withOpacity(0.1),
-                                                        offset:
-                                                            const Offset(0, 3),
-                                                      ),
-                                                    ],
-                                                    shape: BoxShape.rectangle,
-                                                    color: AppColors.delayed,
-                                                  ),
-                                                  child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(5.0),
-                                                    child: Text('Delayed'),
+                                          ],
+                                        ),
+                                        subtitle: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  'Date: ${DateFormat('yyyy-MM-dd').format(task[index].date)}',
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
                                                   ),
                                                 ),
-                                              ),
-                                              Visibility(
-                                                visible: handleDateTime
-                                                        .calculateDelayInMinutes(
-                                                            task[index].date,
-                                                            task[index].time) <=
-                                                    0,
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                5.0)),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        color: AppColors.grey
-                                                            .withOpacity(0.1),
-                                                        offset:
-                                                            const Offset(0, 3),
-                                                      ),
-                                                    ],
-                                                    shape: BoxShape.rectangle,
-                                                    color: AppColors.pending,
+                                                Text(
+                                                  'Time: ${task[index].time}',
+                                                  style: const TextStyle(
+                                                    fontSize: 18,
+                                                    color: Colors.white,
                                                   ),
-                                                  child: const Padding(
-                                                    padding:
-                                                        EdgeInsets.all(5.0),
-                                                    child: Text(
-                                                      'Pending',
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      onTap: () {
-                                        setState(() {
-                                          Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DetailPage(task: task[index]),
-                                            ),
-                                          );
-                                        });
-                                      },
-                                      onLongPress: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  "Do you want to remove?"),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text('No'),
-                                                ),
-                                                TextButton(
-                                                  child: const Text('Yes'),
-                                                  onPressed: () async {
-                                                    await DeleteTask.deleteTask(
-                                                        task[index].id!);
-                                                    _loadTasks();
-                                                    Fluttertoast.showToast(
-                                                      msg:
-                                                          "Removed ${task[index].name}",
-                                                      toastLength:
-                                                          Toast.LENGTH_SHORT,
-                                                      gravity:
-                                                          ToastGravity.CENTER,
-                                                      timeInSecForIosWeb: 1,
-                                                      backgroundColor:
-                                                          AppColors.blue,
-                                                      textColor:
-                                                          AppColors.white,
-                                                      fontSize: 16,
-                                                    );
-                                                    Navigator.pop(context);
-                                                  },
                                                 ),
                                               ],
-                                            );
-                                          },
+                                            ),
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              children: [
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Container(
+                                                      height: 24,
+                                                      width: 24,
+                                                      decoration: BoxDecoration(
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.1),
+                                                            offset:
+                                                                const Offset(
+                                                                    0, 3),
+                                                          ),
+                                                        ],
+                                                        shape: BoxShape.circle,
+                                                        color: task[index]
+                                                                    .priority ==
+                                                                'High'
+                                                            ? AppColors.high
+                                                            : task[index]
+                                                                        .priority ==
+                                                                    'Medium'
+                                                                ? AppColors
+                                                                    .medium
+                                                                : AppColors.low,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 10),
+                                                    Visibility(
+                                                      visible: handleDateTime
+                                                              .calculateDelayInMinutes(
+                                                                  task[index]
+                                                                      .date,
+                                                                  task[index]
+                                                                      .time) >
+                                                          0,
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5.0)),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: AppColors
+                                                                  .grey
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                              offset:
+                                                                  const Offset(
+                                                                      0, 3),
+                                                            ),
+                                                          ],
+                                                          shape: BoxShape
+                                                              .rectangle,
+                                                          color:
+                                                              AppColors.delayed,
+                                                        ),
+                                                        child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  5.0),
+                                                          child:
+                                                              Text('Delayed'),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Visibility(
+                                                      visible: handleDateTime
+                                                              .calculateDelayInMinutes(
+                                                                  task[index]
+                                                                      .date,
+                                                                  task[index]
+                                                                      .time) <=
+                                                          0,
+                                                      child: Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              const BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5.0)),
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: AppColors
+                                                                  .grey
+                                                                  .withOpacity(
+                                                                      0.1),
+                                                              offset:
+                                                                  const Offset(
+                                                                      0, 3),
+                                                            ),
+                                                          ],
+                                                          shape: BoxShape
+                                                              .rectangle,
+                                                          color:
+                                                              AppColors.pending,
+                                                        ),
+                                                        child: const Padding(
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  5.0),
+                                                          child:
+                                                              Text('Pending'),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Text(
+                                                  handleDateTime
+                                                              .calculateDelayInMinutes(
+                                                                  task[index]
+                                                                      .date,
+                                                                  task[index]
+                                                                      .time) >
+                                                          0
+                                                      ? 'delay ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time)} minutes ago'
+                                                      : 'remaining ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time).abs()} minutes',
+                                                  style: const TextStyle(
+                                                    fontSize: 16,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      )),
+                                  onTap: () {
+                                    setState(() {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailPage(task: task[index]),
+                                        ),
+                                      );
+                                    });
+                                  },
+                                  onLongPress: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                              "Do you want to remove?"),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Text('No'),
+                                            ),
+                                            TextButton(
+                                              child: const Text('Yes'),
+                                              onPressed: () async {
+                                                await DeleteTask.deleteTask(
+                                                    task[index].id!);
+                                                _loadTasks();
+                                                Fluttertoast.showToast(
+                                                  msg:
+                                                      "Removed ${task[index].name}",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.CENTER,
+                                                  timeInSecForIosWeb: 1,
+                                                  backgroundColor:
+                                                      AppColors.blue,
+                                                  textColor: AppColors.white,
+                                                  fontSize: 16,
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                            ),
+                                          ],
                                         );
                                       },
-                                    ),
-                                  ),
+                                    );
+                                  },
                                 ),
                               ),
                             );
