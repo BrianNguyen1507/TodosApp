@@ -20,6 +20,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: Provider.of<ThemeProvider>(context)
             .themeData
             .appBarTheme
@@ -187,7 +188,7 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       subtitle: Center(
-                          child: Text(widget.task.description,
+                          child: Text(widget.task.description!,
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
