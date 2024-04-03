@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class HandleDateTime {
   static get handleDateTime => null;
@@ -18,26 +17,25 @@ class HandleDateTime {
   }
 
   static Future<String?> pickTime(
-      BuildContext context, DateTime selectedDate, String selectedTime) async {
+      BuildContext context, DateTime? selectedDate, String selectedTime) async {
     TimeOfDay currentTime = TimeOfDay.now();
+
     TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: selectedTime != null
-          ? TimeOfDay(
-              hour: int.parse(selectedTime.split(':')[0]),
-              minute: int.parse(selectedTime.split(':')[1]))
-          : currentTime,
-    );
+        context: context,
+        initialTime: TimeOfDay(
+            hour: int.parse(selectedTime.split(':')[0]),
+            minute: int.parse(selectedTime.split(':')[1])));
     if (picked != null) {
+      if (selectedDate == null) {
+        return '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+      }
       DateTime now = DateTime.now();
-      String formatNowDate = DateFormat('yyyy-MM-dd').format(now);
-      DateTime getNowDate = DateTime.parse(formatNowDate);
-      if (selectedDate.isAfter(getNowDate)) {
+      if (selectedDate.isAfter(now)) {
         return '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       } else {
-        if ((selectedDate.year == getNowDate.year &&
-            selectedDate.month == getNowDate.month &&
-            selectedDate.day == getNowDate.day &&
+        if ((selectedDate.year == now.year &&
+            selectedDate.month == now.month &&
+            selectedDate.day == now.day &&
             (picked.hour < currentTime.hour ||
                 (picked.hour == currentTime.hour &&
                     picked.minute < currentTime.minute)))) {
