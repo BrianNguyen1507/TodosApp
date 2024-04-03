@@ -4,11 +4,13 @@ import 'package:provider/provider.dart';
 import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/update.dart';
+import 'package:todo/services/handle/handleDateTime.dart';
 
 import 'package:todo/theme/provider.dart';
 
 class DetailPage extends StatefulWidget {
   final CongViec task;
+
   const DetailPage({super.key, required this.task});
 
   @override
@@ -16,6 +18,13 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  HandleDateTime handleDateTime = HandleDateTime();
+  bool isDelayed() {
+    return handleDateTime.calculateDelayInMinutes(
+            widget.task.date, widget.task.time) >
+        0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,14 +76,14 @@ class _DetailPageState extends State<DetailPage> {
                         margin: const EdgeInsets.all(2),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: widget.task.isCompleted
-                              ? AppColors.done
-                              : AppColors.medium,
+                          color: isDelayed()
+                              ? AppColors.delayed
+                              : AppColors.pending,
                         ),
                         child: Center(
-                          child: widget.task.isCompleted
+                          child: isDelayed()
                               ? const Text(
-                                  'Done',
+                                  'Delayed',
                                   style: TextStyle(
                                     color: AppColors.white,
                                     fontWeight: FontWeight.bold,
