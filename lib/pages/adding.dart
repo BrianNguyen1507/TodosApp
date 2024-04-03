@@ -7,6 +7,7 @@ import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo/services/AddTask.dart';
+import 'package:todo/services/handle/handleDateTime';
 import 'package:todo/theme/provider.dart';
 
 class AddSchedule extends StatefulWidget {
@@ -18,11 +19,31 @@ class AddSchedule extends StatefulWidget {
 
 class _AddScheduleState extends State<AddSchedule> {
   late String _priority = 'Low';
-
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _discriptionController = TextEditingController();
-  late DateTime selectedDate;
-  late String selectedTime;
+  late DateTime _selectedDate;
+  late String _selectedTime;
+
+  Future<void> _selectDate() async {
+    DateTime? pickedDate =
+        await HandleDateTime.pickDate(context, _selectedDate);
+    if (pickedDate != null) {
+      setState(() {
+        _selectedDate = pickedDate;
+      });
+    }
+  }
+
+  Future<void> _selectTime() async {
+    String? pickedTime =
+        await HandleDateTime.pickTime(context, _selectedDate, _selectedTime);
+    if (pickedTime != null) {
+      setState(() {
+        _selectedTime = pickedTime;
+      });
+    }
+  }
+
   late List<CongViec> listAdded;
   @override
   void initState() {
@@ -33,58 +54,8 @@ class _AddScheduleState extends State<AddSchedule> {
   void resetDateTime() {
     _nameController.clear();
     _discriptionController.clear();
-    selectedDate = DateTime.now();
-    selectedTime = DateFormat('kk:mm').format(DateTime.now());
-  }
-
-  Future<void> _selectedDate(BuildContext context) async {
-    DateTime? picker = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2202),
-    );
-    if (picker != null && picker != selectedDate) {
-      setState(() {
-        selectedDate = picker;
-      });
-    }
-  }
-
-  Future<void> _selectedTime(BuildContext context) async {
-    TimeOfDay currentTime = TimeOfDay.now();
-    TimeOfDay? picked = await showTimePicker(
-      context: context,
-      initialTime: currentTime,
-    );
-    if (picked != null) {
-      DateTime now = DateTime.now();
-      DateTime selectedDateTime =
-          DateTime(now.year, now.month, now.day, picked.hour, picked.minute);
-      if (selectedDateTime.isAfter(now)) {
-        setState(() {
-          selectedTime = DateFormat('kk:mm').format(selectedDateTime);
-        });
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text("Warning"),
-              content: const Text("Invalid datetime, try again please"),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text("OK"),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }
+    _selectedDate = DateTime.now();
+    _selectedTime = DateFormat('kk:mm').format(DateTime.now());
   }
 
   @override
@@ -177,8 +148,8 @@ class _AddScheduleState extends State<AddSchedule> {
                               ),
                             ),
                             TextSpan(
-                              text:
-                                  DateFormat('yyyy-MM-dd').format(selectedDate),
+                              text: DateFormat('yyyy-MM-dd')
+                                  .format(_selectedDate),
                               style: const TextStyle(
                                 fontSize: 18,
                                 color: AppColors.subtitle,
@@ -202,7 +173,7 @@ class _AddScheduleState extends State<AddSchedule> {
                             size: 30,
                           ),
                           onPressed: () {
-                            _selectedDate(context);
+                            _selectDate();
                           },
                         ),
                       )
@@ -238,7 +209,7 @@ class _AddScheduleState extends State<AddSchedule> {
                               ),
                             ),
                             TextSpan(
-                              text: selectedTime,
+                              text: _selectedTime,
                               style: const TextStyle(
                                 color: AppColors.subtitle,
                                 fontSize: 18,
@@ -262,7 +233,7 @@ class _AddScheduleState extends State<AddSchedule> {
                             size: 40,
                           ),
                           onPressed: () {
-                            _selectedTime(context);
+                            _selectTime();
                           },
                         ),
                       ),
@@ -344,17 +315,17 @@ class _AddScheduleState extends State<AddSchedule> {
                 onPressed: () async {
                   scheduleAndCreateNotifications();
                   setState(() {
-                    if (selectedDate !=
+                    if (_selectedDate !=
                             DateFormat('yyyy:MM:dd').format(DateTime.now()) ||
-                        selectedTime !=
+                        _selectedTime !=
                             DateFormat('kk:mm').format(DateTime.now())) {
-                      if (_nameController.text.isNotEmpty &&
+                      if (_nameController.text.isNotEmpty ||
                           _discriptionController.text.isNotEmpty) {
                         CongViec newTask = CongViec(
                           name: _nameController.text,
                           description: _discriptionController.text,
-                          date: selectedDate,
-                          time: selectedTime,
+                          date: _selectedDate,
+                          time: _selectedTime,
                           priority: _priority,
                         );
                         AddTask.addTask(newTask);
@@ -377,7 +348,6 @@ class _AddScheduleState extends State<AddSchedule> {
                         );
                       }
                     } else {
-                      // Show a message indicating that the selected time is the current time
                       Fluttertoast.showToast(
                         msg: "Please select a different time",
                         toastLength: Toast.LENGTH_SHORT,
