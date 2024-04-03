@@ -2,8 +2,8 @@ import 'package:intl/intl.dart';
 
 class CongViec {
   int? id;
+  String? description;
   String name;
-  String description;
   DateTime date;
   String time;
   String priority;
@@ -11,8 +11,8 @@ class CongViec {
 
   CongViec({
     this.id,
+    this.description,
     required this.name,
-    required this.description,
     required this.date,
     required this.time,
     required this.priority,
