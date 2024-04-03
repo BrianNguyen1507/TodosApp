@@ -38,7 +38,15 @@ class GetNotificationDateTime {
   TimeOfDay _parseTime(String timeStr) {
     List<String> parts = timeStr.split(':');
     int hour = int.parse(parts[0]);
-    int minute = int.parse(parts[1]);
+
+    String minuteStr = parts[1].length == 1 ? '0${parts[1]}' : parts[1];
+    int minute = int.parse(minuteStr);
+
+    bool isPM = timeStr.contains('PM');
+    if (isPM && hour != 12) {
+      hour += 12;
+    }
+
     return TimeOfDay(hour: hour, minute: minute);
   }
 }
