@@ -18,7 +18,7 @@ class HandleDateTime {
   }
 
   static Future<String?> pickTime(
-      BuildContext context, DateTime selectedDate, String? selectedTime) async {
+      BuildContext context, DateTime selectedDate, String selectedTime) async {
     TimeOfDay currentTime = TimeOfDay.now();
     TimeOfDay? picked = await showTimePicker(
       context: context,
@@ -28,12 +28,10 @@ class HandleDateTime {
               minute: int.parse(selectedTime.split(':')[1]))
           : currentTime,
     );
-
     if (picked != null) {
       DateTime now = DateTime.now();
       String formatNowDate = DateFormat('yyyy-MM-dd').format(now);
       DateTime getNowDate = DateTime.parse(formatNowDate);
-
       if (selectedDate.isAfter(getNowDate)) {
         return '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
       } else {
