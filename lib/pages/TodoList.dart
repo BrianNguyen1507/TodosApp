@@ -12,7 +12,7 @@ import 'package:todo/pages/completedList.dart';
 import 'package:todo/pages/detail.dart';
 import 'package:todo/services/DeleteTask.dart';
 import 'package:todo/services/MarkDoneTask.dart';
-import 'package:todo/services/handle/handleDateTime.';
+import 'package:todo/services/handle/handleDateTime.dart';
 import 'package:todo/theme/provider.dart';
 import 'package:todo/theme/theme.dart';
 
@@ -211,6 +211,7 @@ class _TodoSampleState extends State<TodoSample> {
                         final task = snapshot.data!;
 
                         return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
                           itemCount: task.length,
                           itemBuilder: (BuildContext context, index) {
                             return Dismissible(
@@ -299,18 +300,49 @@ class _TodoSampleState extends State<TodoSample> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  'Date: ${DateFormat('yyyy-MM-dd').format(task[index].date)}',
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.white,
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      const TextSpan(
+                                                        text: 'Date: ',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Colors.white70,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: DateFormat(
+                                                                'yyyy-MM-dd')
+                                                            .format(task[index]
+                                                                .date),
+                                                        style: const TextStyle(
+                                                          fontSize: 18,
+                                                          color:
+                                                              AppColors.white,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Text(
-                                                  'Time: ${task[index].time}',
-                                                  style: const TextStyle(
-                                                    fontSize: 18,
-                                                    color: Colors.white,
+                                                RichText(
+                                                  text: TextSpan(
+                                                    children: [
+                                                      const TextSpan(
+                                                        text: 'Time: ',
+                                                        style: TextStyle(
+                                                          fontSize: 18,
+                                                          color: Colors.white70,
+                                                        ),
+                                                      ),
+                                                      TextSpan(
+                                                        text: task[index].time,
+                                                        style: const TextStyle(
+                                                          fontSize: 18,
+                                                          color:
+                                                              AppColors.white,
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
                                               ],

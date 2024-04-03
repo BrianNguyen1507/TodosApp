@@ -104,6 +104,7 @@ class _CompletedListState extends State<CompletedList> {
                       } else {
                         final task = snapshot.data!;
                         return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
                           itemCount: task.length,
                           itemBuilder: (BuildContext context, index) {
                             return Dismissible(
