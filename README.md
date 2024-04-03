@@ -6,6 +6,7 @@ Welcome to the TODO APP exercise! In this project, you will create a small appli
 
 This exercise is intended to help you practice your skills in Flutter, Dart, and using SQLite to store data. The application should have the following key features:
 
+
 ### Home Page
 
 Displays the welcome home page with a banner and a list of tasks to be completed (Todo list). Users can also add tasks from this page.
