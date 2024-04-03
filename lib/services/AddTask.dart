@@ -21,9 +21,7 @@ class AddTask {
         },
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-    } catch (e) {
-      print('Error adding task: $e');
-    }
+      // ignore: empty_catches
+    } catch (e) {}
   }
 }
- 

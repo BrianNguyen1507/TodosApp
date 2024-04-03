@@ -3,7 +3,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
-import 'package:todo/pages/update.dart';
+import 'package:todo/pages/UpdateAdd.dart';
+
 import 'package:todo/services/handle/handleDateTime.dart';
 
 import 'package:todo/theme/provider.dart';
@@ -48,7 +49,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => UpdatePage(
+                builder: (context) => UpdateAddTask(
                   taskToUpdate: widget.task,
                 ),
               ));

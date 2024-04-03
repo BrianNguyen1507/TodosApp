@@ -6,10 +6,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/Database/Dbhelper.dart';
 import 'package:todo/constant/colors.dart';
-import 'package:todo/pages/adding.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/completedList.dart';
 import 'package:todo/pages/detail.dart';
+import 'package:todo/pages/UpdateAdd.dart';
 import 'package:todo/services/DeleteTask.dart';
 import 'package:todo/services/MarkDoneTask.dart';
 import 'package:todo/services/handle/handleDateTime.dart';
@@ -68,7 +68,9 @@ class _TodoSampleState extends State<TodoSample> {
             final itemnew = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const AddSchedule(),
+                builder: (context) => const UpdateAddTask(
+                  taskToUpdate: null,
+                ),
               ),
             );
             if (itemnew != null) {
