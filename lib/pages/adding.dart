@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,7 +9,7 @@ import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo/services/AddTask.dart';
-import 'package:todo/services/handle/handleDateTime';
+import 'package:todo/services/handle/handleDateTime.dart';
 import 'package:todo/theme/provider.dart';
 
 class AddSchedule extends StatefulWidget {
@@ -23,7 +25,7 @@ class _AddScheduleState extends State<AddSchedule> {
   final TextEditingController _discriptionController = TextEditingController();
   late DateTime _selectedDate;
   late String _selectedTime;
-
+  late Timer? _timer;
   Future<void> _selectDate() async {
     DateTime? pickedDate =
         await HandleDateTime.pickDate(context, _selectedDate);
@@ -49,6 +51,17 @@ class _AddScheduleState extends State<AddSchedule> {
   void initState() {
     super.initState();
     resetDateTime();
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      setState(() {
+        _selectedTime = DateFormat('kk:mm').format(DateTime.now());
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
   }
 
   void resetDateTime() {
@@ -84,6 +97,7 @@ class _AddScheduleState extends State<AddSchedule> {
               padding: const EdgeInsets.all(10),
               child: TextField(
                 autofocus: true,
+                maxLength: 100,
                 controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(

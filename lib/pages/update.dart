@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +8,7 @@ import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:todo/services/handle/handleDateTime';
+import 'package:todo/services/handle/handleDateTime.dart';
 import 'package:todo/services/updateTask.dart';
 import 'package:todo/theme/provider.dart';
 
@@ -19,7 +21,7 @@ class UpdatePage extends StatefulWidget {
 
 class _UpdatePageState extends State<UpdatePage> {
   late String _priority;
-
+  late Timer? _timer;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _discriptionController = TextEditingController();
 
@@ -56,6 +58,17 @@ class _UpdatePageState extends State<UpdatePage> {
     _priority = widget.taskToUpdate.priority;
     _selectedDate = widget.taskToUpdate.date;
     _selectedTime = widget.taskToUpdate.time;
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      setState(() {
+        _selectedTime = DateFormat('kk:mm').format(DateTime.now());
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
   }
 
   void resetDateTime() {
