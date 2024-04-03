@@ -14,6 +14,7 @@ class AppColors {
 //status
   static const Color done = Colors.green;
   static const Color delayed = Color(0xFFFFA500);
+  static const Color pending = Color.fromARGB(255, 45, 184, 23);
   static const Color delete = Colors.red;
 //arrow detail
   static const Color arrow = Colors.blue;
