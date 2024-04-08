@@ -127,6 +127,7 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
+                maxLength: 100,
                 controller: _nameController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
@@ -348,76 +349,77 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
               ),
             ),
             Container(
-                height: 50,
-                width: double.infinity,
-                color: Colors.transparent,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.button,
-                  ),
-                  onPressed: () async {
-                    scheduleAndCreateNotifications();
-                    if (isUpdating) {
-                      final updatedTask = CongViec(
-                        id: widget.taskToUpdate!.id,
-                        name: _nameController.text,
-                        description: _discriptionController.text,
-                        date: _selectedDate,
-                        time: _selectedTime,
-                        priority: _priority,
-                      );
-                      await UpdateTask.updateTask(updatedTask);
-                      Fluttertoast.showToast(
-                        msg: 'Task updated successfully!',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: AppColors.blue,
-                        textColor: AppColors.white,
-                        fontSize: 16,
-                      );
-                    } else {
-                      final newTask = CongViec(
-                        name: _nameController.text,
-                        description: _discriptionController.text,
-                        date: _selectedDate,
-                        time: _selectedTime,
-                        priority: _priority,
-                      );
-                      await AddTask.addTask(newTask);
-                      Fluttertoast.showToast(
-                        msg: 'Task added successfully!',
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: AppColors.blue,
-                        textColor: AppColors.white,
-                        fontSize: 16,
-                      );
-                    }
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const TodoSample(),
-                      ),
+              height: 50,
+              width: double.infinity,
+              color: Colors.transparent,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.button,
+                ),
+                onPressed: () async {
+                  scheduleAndCreateNotifications();
+                  if (isUpdating) {
+                    final updatedTask = CongViec(
+                      id: widget.taskToUpdate!.id,
+                      name: _nameController.text,
+                      description: _discriptionController.text,
+                      date: _selectedDate,
+                      time: _selectedTime,
+                      priority: _priority,
                     );
-                  },
-                  child: isUpdating
-                      ? const Text(
-                          'Update',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        )
-                      : const Text(
-                          'Add',
-                          style: TextStyle(
-                              color: AppColors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
-                        ),
-                )),
+                    await UpdateTask.updateTask(updatedTask);
+                    Fluttertoast.showToast(
+                      msg: 'Task updated successfully!',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColors.blue,
+                      textColor: AppColors.white,
+                      fontSize: 16,
+                    );
+                  } else {
+                    final newTask = CongViec(
+                      name: _nameController.text,
+                      description: _discriptionController.text,
+                      date: _selectedDate,
+                      time: _selectedTime,
+                      priority: _priority,
+                    );
+                    await AddTask.addTask(newTask);
+                    Fluttertoast.showToast(
+                      msg: 'Task added successfully!',
+                      toastLength: Toast.LENGTH_SHORT,
+                      gravity: ToastGravity.CENTER,
+                      timeInSecForIosWeb: 1,
+                      backgroundColor: AppColors.blue,
+                      textColor: AppColors.white,
+                      fontSize: 16,
+                    );
+                  }
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const TodoSample(),
+                    ),
+                  );
+                },
+                child: isUpdating
+                    ? const Text(
+                        'Update',
+                        style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      )
+                    : const Text(
+                        'Add',
+                        style: TextStyle(
+                            color: AppColors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold),
+                      ),
+              ),
+            ),
           ],
         ),
       ),
