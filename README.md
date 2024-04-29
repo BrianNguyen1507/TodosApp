@@ -1,8 +1,12 @@
 ## Review apps
-<img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/add.gif" alt="add task" width="200">
-<img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/update.gif" alt="update task" width="200">
-<img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/delete.gif" alt="delete task" width="200">
-<img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/theme.gif" alt="theme toggle" width="200">
+<table>
+  <tr>
+    <td><img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/add.gif" alt="add task" width="200"></td>
+    <td><img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/update.gif" alt="update task" width="200"></td>
+    <td><img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/delete.gif" alt="delete task" width="200"></td>
+    <td><img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/theme.gif" alt="theme toggle" width="200"></td>
+  </tr>
+</table>
 # Exercise: TODO APPLICATION
 
 Welcome to the TODO APP exercise! In this project, I will create a small app that allows people to manage future tasks and mark them as complete.
