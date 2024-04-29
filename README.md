@@ -1,4 +1,4 @@
-![Add task](https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/add.gif)
+<img src="https://github.com/BrianNguyen1507/TodosApp/blob/main/lib/images/review/add.gif" alt="Add task" width="400">
 
 
 # Exercise: TODO APPLICATION
