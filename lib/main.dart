@@ -11,8 +11,8 @@ import 'package:todo/Database/Dbhelper.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await DBHelper.initializeDatabase();
-  await SharedPreferences.getInstance(); // save viewmode
-  await initializeLocalNotifications(); // notification
+  await SharedPreferences.getInstance();
+  await initializeLocalNotifications();
   scheduleAndCreateNotifications();
   runApp(
     ChangeNotifierProvider(
@@ -46,7 +46,7 @@ Future<void> initializeLocalNotifications() async {
         ledColor: Colors.deepPurple,
       )
     ],
-    debug: true,
+    debug: false,
   );
 }
 
