@@ -4,10 +4,10 @@ import 'package:provider/provider.dart';
 import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/pages/UpdateAdd.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todo/services/handle/handleDateTime.dart';
 
-import 'package:todo/theme/provider.dart';
+import 'package:todo/Provider/provider.dart';
 
 class DetailPage extends StatefulWidget {
   final CongViec task;
@@ -28,6 +28,32 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    String getPriorityText() {
+      switch (widget.task.priority.toString()) {
+        case 'High':
+          return AppLocalizations.of(context)?.high ?? 'High';
+        case 'Medium':
+          return AppLocalizations.of(context)?.medium ?? 'Medium';
+        case 'Low':
+          return AppLocalizations.of(context)?.low ?? 'Low';
+        default:
+          return '';
+      }
+    }
+
+    Color getColorByPriority() {
+      switch (widget.task.priority.toString()) {
+        case 'High':
+          return AppColors.high;
+        case 'Medium':
+          return AppColors.medium;
+        case 'Low':
+          return AppColors.low;
+        default:
+          return Colors.transparent;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -83,16 +109,16 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         child: Center(
                           child: isDelayed()
-                              ? const Text(
-                                  'Delayed',
-                                  style: TextStyle(
+                              ? Text(
+                                  AppLocalizations.of(context)!.delayed,
+                                  style: const TextStyle(
                                     color: AppColors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 )
-                              : const Text(
-                                  'Pending',
-                                  style: TextStyle(
+                              : Text(
+                                  AppLocalizations.of(context)!.pending,
+                                  style: const TextStyle(
                                     color: AppColors.white,
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -105,15 +131,11 @@ class _DetailPageState extends State<DetailPage> {
                         margin: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: widget.task.priority == 'High'
-                              ? AppColors.high
-                              : widget.task.priority == 'Medium'
-                                  ? AppColors.medium
-                                  : AppColors.low,
+                          color: getColorByPriority(),
                         ),
                         child: Center(
                           child: Text(
-                            widget.task.priority,
+                            getPriorityText(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -137,9 +159,9 @@ class _DetailPageState extends State<DetailPage> {
                         children: [
                           Row(
                             children: [
-                              const Text(
-                                'Date',
-                                style: TextStyle(
+                              Text(
+                                '${AppLocalizations.of(context)!.date} :',
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                   color: Colors.white,
@@ -156,9 +178,9 @@ class _DetailPageState extends State<DetailPage> {
                           ),
                           Row(
                             children: [
-                              const Text(
-                                'Time',
-                                style: TextStyle(
+                              Text(
+                                '${AppLocalizations.of(context)!.time} :',
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                   color: Colors.white,
@@ -187,10 +209,10 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     child: ListTile(
-                      title: const Center(
+                      title: Center(
                         child: Text(
-                          'Description',
-                          style: TextStyle(
+                          AppLocalizations.of(context)!.description,
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
                             fontSize: 18,
@@ -198,11 +220,14 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                       subtitle: Center(
-                          child: Text(widget.task.description!,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ))),
+                        child: Text(
+                          widget.task.description!,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],

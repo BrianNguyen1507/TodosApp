@@ -1,0 +1,30 @@
+{
+  "iswaiting":"is waiting for you to complete. Get it done!",
+  "reminder":"reminders",
+  "fail":"fail!",
+  "success":"successfully!",
+  "dosmth":"'what do you want to do?",
+  "updatetask":"Update Task",
+  "addtask":"Add Task",
+  "todolist": "Todolist",
+  "@todolist": {
+    "description": "Todolist"
+  },
+  "completedlist": "Completed",
+  "ago":"ago",
+  "minutes":"minutes",
+  "remaining":"remaining",
+  "description": "Description",
+  "priority": "Priority",
+  "time":"Time",
+  "date": "Date",
+  "high":"High",
+  "medium":"Medium",
+  "low":"Low",
+  "pending": "Pending",
+  "delayed": "delayed",
+  "language": "English",
+  "@language": {
+    "description": "Change to English"
+  }
+}

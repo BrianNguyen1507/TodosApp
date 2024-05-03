@@ -1,20 +1,18 @@
 import 'dart:async';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+
 import 'package:todo/Database/Dbhelper.dart';
 import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
-import 'package:todo/pages/completedList.dart';
+
 import 'package:todo/pages/detail.dart';
 import 'package:todo/pages/UpdateAdd.dart';
 import 'package:todo/services/DeleteTask.dart';
 import 'package:todo/services/MarkDoneTask.dart';
 import 'package:todo/services/handle/handleDateTime.dart';
-import 'package:todo/theme/provider.dart';
-import 'package:todo/theme/theme.dart';
 
 class TodoSample extends StatefulWidget {
   const TodoSample({super.key});
@@ -79,117 +77,6 @@ class _TodoSampleState extends State<TodoSample> {
               });
             }
           },
-        ),
-        appBar: AppBar(
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: const Icon(Icons.menu),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-              );
-            },
-          ),
-          centerTitle: true,
-          elevation: 0.0,
-          automaticallyImplyLeading: false,
-          backgroundColor: Provider.of<ThemeProvider>(context)
-              .themeData
-              .appBarTheme
-              .backgroundColor,
-          title: const Text(
-            "TO DO LIST",
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            Row(
-              children: [
-                Switch(
-                  thumbIcon: istoggle
-                      ? const WidgetStatePropertyAll(
-                          Icon(
-                            Icons.light_mode,
-                            color: Colors.yellow,
-                          ),
-                        )
-                      : const WidgetStatePropertyAll(
-                          Icon(
-                            Icons.dark_mode,
-                            color: Colors.white,
-                          ),
-                        ),
-                  activeColor: Colors.blue,
-                  value:
-                      Provider.of<ThemeProvider>(context).themeData == darkmode,
-                  onChanged: (value) {
-                    istoggle = !istoggle;
-                    Provider.of<ThemeProvider>(context, listen: false)
-                        .toggleTheme();
-                  },
-                ),
-              ],
-            )
-          ],
-        ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              const DrawerHeader(
-                curve: Curves.bounceInOut,
-                decoration: BoxDecoration(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Center(
-                        child: Text(
-                      'You are wonderful',
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue),
-                    )),
-                    Center(
-                        child: Text(
-                      'Have a nice day!!!',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.amber),
-                    )),
-                  ],
-                ),
-              ),
-              ListTile(
-                title: const Text(
-                  'TODO LIST',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const TodoSample(),
-                  ));
-                },
-              ),
-              ListTile(
-                title: const Text(
-                  'COMPLETED LIST',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const CompletedList(),
-                  ));
-                },
-              ),
-            ],
-          ),
         ),
         body: Container(
           color: Colors.transparent,
@@ -305,9 +192,10 @@ class _TodoSampleState extends State<TodoSample> {
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
-                                                      const TextSpan(
-                                                        text: 'Date: ',
-                                                        style: TextStyle(
+                                                      TextSpan(
+                                                        text:
+                                                            '${AppLocalizations.of(context)!.date} :',
+                                                        style: const TextStyle(
                                                           fontSize: 18,
                                                           color: Colors.white70,
                                                         ),
@@ -329,9 +217,10 @@ class _TodoSampleState extends State<TodoSample> {
                                                 RichText(
                                                   text: TextSpan(
                                                     children: [
-                                                      const TextSpan(
-                                                        text: 'Time: ',
-                                                        style: TextStyle(
+                                                      TextSpan(
+                                                        text:
+                                                            '${AppLocalizations.of(context)!.time} :',
+                                                        style: const TextStyle(
                                                           fontSize: 18,
                                                           color: Colors.white70,
                                                         ),
@@ -420,12 +309,14 @@ class _TodoSampleState extends State<TodoSample> {
                                                           color:
                                                               AppColors.delayed,
                                                         ),
-                                                        child: const Padding(
+                                                        child: Padding(
                                                           padding:
-                                                              EdgeInsets.all(
-                                                                  5.0),
-                                                          child:
-                                                              Text('Delayed'),
+                                                              const EdgeInsets
+                                                                  .all(5.0),
+                                                          child: Text(
+                                                              AppLocalizations.of(
+                                                                      context)!
+                                                                  .delayed),
                                                         ),
                                                       ),
                                                     ),
@@ -461,12 +352,14 @@ class _TodoSampleState extends State<TodoSample> {
                                                           color:
                                                               AppColors.pending,
                                                         ),
-                                                        child: const Padding(
+                                                        child: Padding(
                                                           padding:
-                                                              EdgeInsets.all(
-                                                                  5.0),
-                                                          child:
-                                                              Text('Pending'),
+                                                              const EdgeInsets
+                                                                  .all(5.0),
+                                                          child: Text(
+                                                              AppLocalizations.of(
+                                                                      context)!
+                                                                  .pending),
                                                         ),
                                                       ),
                                                     ),
@@ -480,8 +373,8 @@ class _TodoSampleState extends State<TodoSample> {
                                                                   task[index]
                                                                       .time) >
                                                           0
-                                                      ? 'delay ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time)} minutes ago'
-                                                      : 'remaining ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time).abs()} minutes',
+                                                      ? '${AppLocalizations.of(context)!.delayed} ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time)} ${AppLocalizations.of(context)!.minutes} ${AppLocalizations.of(context)!.ago}'
+                                                      : ' ${AppLocalizations.of(context)!.remaining} ${handleDateTime.calculateDelayInMinutes(task[index].date, task[index].time).abs()}  ${AppLocalizations.of(context)!.minutes}',
                                                   style: const TextStyle(
                                                     fontSize: 16,
                                                     color: Colors.grey,

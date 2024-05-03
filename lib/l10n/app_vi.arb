@@ -1,0 +1,32 @@
+{
+  "iswaiting":"Đang chờ bạn hoàn tất, hãy hoàn thành nó !",
+  "reminder":"nhắc nhở",
+  "fail":"thất bại!",
+  "success":"thành công!",
+  "dosmth":"Bạn muốn làm gì?",
+  "updatetask":"Cập nhật công việc",
+  "addtask":"Thêm công việc",
+  "todolist": "DS Công việc",
+  "@todolist": {
+    "description": "Danh sách công việc"
+  },
+  "completedlist": "DS Hoàn Thành",
+  "ago":"trước",
+  "minutes":"phút",
+  "remaining":"còn lại",
+  "description": "Mô tả",
+  "priority": "Độ ưu tiên",
+  "time":"Giờ",
+  "date": "Ngày",
+  "high":"Cao",
+  "medium":"Trung Bình",
+  "low":"Thấp",
+  "pending": "Đang xử lý",
+  "delayed": "Trễ hạn",
+  "language": "Tiếng Việt",
+  "@language": {
+    "description": "Thay đổi thành Tiếng Việt"
+  }
+ 
+ 
+}

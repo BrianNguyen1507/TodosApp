@@ -5,13 +5,14 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo/Notification/ScheduleNotifications.dart';
 import 'package:todo/constant/colors.dart';
+import 'package:todo/main.dart';
 import 'package:todo/models/congviec.dart';
-import 'package:todo/pages/TodoList.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo/services/AddTask.dart';
 import 'package:todo/services/handle/handleDateTime.dart';
 import 'package:todo/services/updateTask.dart';
-import 'package:todo/theme/provider.dart';
+import 'package:todo/Provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UpdateAddTask extends StatefulWidget {
   const UpdateAddTask({super.key, required this.taskToUpdate});
@@ -92,16 +93,16 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
       appBar: AppBar(
         centerTitle: true,
         title: isUpdating
-            ? const Text(
-                'UPDATE TASK',
-                style: TextStyle(
+            ? Text(
+                AppLocalizations.of(context)!.updatetask,
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: AppColors.title),
               )
-            : const Text(
-                'ADD TASK',
-                style: TextStyle(
+            : Text(
+                AppLocalizations.of(context)!.addtask,
+                style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 20,
                     color: AppColors.title),
@@ -129,16 +130,16 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
               child: TextField(
                 maxLength: 100,
                 controller: _nameController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(
                       width: 0.5,
                       color: AppColors.grey,
                     ),
                   ),
-                  hintText: 'what do you want to do?',
-                  hintStyle: TextStyle(
+                  hintText: AppLocalizations.of(context)!.dosmth,
+                  hintStyle: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 18,
                   ),
@@ -149,16 +150,16 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
               padding: const EdgeInsets.all(10),
               child: TextField(
                 controller: _discriptionController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10)),
                     borderSide: BorderSide(
                       width: 0.5,
                       color: AppColors.grey,
                     ),
                   ),
-                  hintText: 'Description',
-                  hintStyle: TextStyle(
+                  hintText: AppLocalizations.of(context)!.description,
+                  hintStyle: const TextStyle(
                     fontWeight: FontWeight.normal,
                     fontSize: 18,
                   ),
@@ -183,9 +184,9 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                       RichText(
                         text: TextSpan(
                           children: [
-                            const TextSpan(
-                              text: "Date:   ",
-                              style: TextStyle(
+                            TextSpan(
+                              text: "${AppLocalizations.of(context)!.date}:   ",
+                              style: const TextStyle(
                                 color: AppColors.title,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -244,9 +245,9 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                       RichText(
                         text: TextSpan(
                           children: [
-                            const TextSpan(
-                              text: "Time:   ",
-                              style: TextStyle(
+                            TextSpan(
+                              text: "${AppLocalizations.of(context)!.time}:   ",
+                              style: const TextStyle(
                                 color: AppColors.title,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -290,9 +291,9 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
               padding: const EdgeInsets.all(20),
               child: Column(
                 children: [
-                  const Text(
-                    'Priority',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.priority,
+                    style: const TextStyle(
                       color: AppColors.title,
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -312,7 +313,7 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                               });
                             },
                           ),
-                          const Text('High'),
+                          Text(AppLocalizations.of(context)!.high),
                         ],
                       ),
                       Row(
@@ -326,7 +327,7 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                               });
                             },
                           ),
-                          const Text('Medium'),
+                          Text(AppLocalizations.of(context)!.medium),
                         ],
                       ),
                       Row(
@@ -340,7 +341,7 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                               });
                             },
                           ),
-                          const Text('Low'),
+                          Text(AppLocalizations.of(context)!.low),
                         ],
                       )
                     ],
@@ -369,7 +370,8 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                     );
                     await UpdateTask.updateTask(updatedTask);
                     Fluttertoast.showToast(
-                      msg: 'Task updated successfully!',
+                      msg:
+                          ' ${AppLocalizations.of(context)!.updatetask} ${AppLocalizations.of(context)!.success}',
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
@@ -387,7 +389,8 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                     );
                     await AddTask.addTask(newTask);
                     Fluttertoast.showToast(
-                      msg: 'Task added successfully!',
+                      msg:
+                          ' ${AppLocalizations.of(context)!.addtask} ${AppLocalizations.of(context)!.success}',
                       toastLength: Toast.LENGTH_SHORT,
                       gravity: ToastGravity.CENTER,
                       timeInSecForIosWeb: 1,
@@ -399,21 +402,21 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const TodoSample(),
+                      builder: (context) => const MyApp(),
                     ),
                   );
                 },
                 child: isUpdating
-                    ? const Text(
-                        'Update',
-                        style: TextStyle(
+                    ? Text(
+                        AppLocalizations.of(context)!.updatetask,
+                        style: const TextStyle(
                             color: AppColors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),
                       )
-                    : const Text(
-                        'Add',
-                        style: TextStyle(
+                    : Text(
+                        AppLocalizations.of(context)!.addtask,
+                        style: const TextStyle(
                             color: AppColors.white,
                             fontSize: 20,
                             fontWeight: FontWeight.bold),

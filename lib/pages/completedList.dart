@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
 import 'package:todo/Database/Dbhelper.dart';
 import 'package:todo/constant/colors.dart';
 import 'package:todo/models/congviec.dart';
 import 'package:todo/services/DeleteTask.dart';
-import 'package:todo/theme/provider.dart';
-import 'package:todo/theme/theme.dart';
 
 class CompletedList extends StatefulWidget {
   const CompletedList({super.key});
@@ -37,52 +34,6 @@ class _CompletedListState extends State<CompletedList> {
       color: AppColors.blue,
       onRefresh: _onRefresh,
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0.0,
-          automaticallyImplyLeading: true,
-          backgroundColor: Provider.of<ThemeProvider>(context)
-              .themeData
-              .appBarTheme
-              .backgroundColor,
-          title: const Text(
-            "COMPLETED",
-            style: TextStyle(
-              color: AppColors.blue,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          actions: [
-            Row(
-              children: [
-                Switch(
-                  thumbIcon: istoggle
-                      ? const WidgetStatePropertyAll(
-                          Icon(
-                            Icons.light_mode,
-                            color: AppColors.yellow,
-                          ),
-                        )
-                      : const WidgetStatePropertyAll(
-                          Icon(
-                            Icons.dark_mode,
-                            color: Colors.white,
-                          ),
-                        ),
-                  activeColor: AppColors.blue,
-                  value:
-                      Provider.of<ThemeProvider>(context).themeData == darkmode,
-                  onChanged: (value) {
-                    istoggle = !istoggle;
-                    Provider.of<ThemeProvider>(context, listen: false)
-                        .toggleTheme();
-                  },
-                ),
-              ],
-            )
-          ],
-        ),
         body: Container(
           color: Colors.transparent,
           child: Column(
