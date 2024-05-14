@@ -358,7 +358,7 @@ class _UpdateAddTaskState extends State<UpdateAddTask> {
                   backgroundColor: AppColors.button,
                 ),
                 onPressed: () async {
-                  scheduleAndCreateNotifications();
+                  NotificationController.initializeAndScheduleNotifications();
                   if (isUpdating) {
                     final updatedTask = CongViec(
                       id: widget.taskToUpdate!.id,

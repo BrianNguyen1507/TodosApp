@@ -2,9 +2,17 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:todo/Notification/GetDateTime.dart';
 import 'dart:async';
 
+class NotificationController {
+  static Future<void> initializeAndScheduleNotifications() async {
+    bool isAllowToNoti = await AwesomeNotifications().isNotificationAllowed();
+    if (isAllowToNoti) {
+      scheduleAndCreateNotifications();
+    }
+  }
+}
+
 void scheduleAndCreateNotifications() async {
   GetNotificationDateTime notificationDateTime = GetNotificationDateTime();
-
   List<Map<String, dynamic>> taskDateTimeList =
       await notificationDateTime.getTaskDateTimeList();
   createScheduledNotifications(taskDateTimeList);
@@ -21,16 +29,16 @@ Future<void> createScheduledNotifications(
           const Duration(hours: 7),
         );
     String formattedDateTime =
-        scheduledDateTime.toIso8601String().replaceAll('Z', '');//repleace Z is UTC timezone.
-    ('Formatted DateTime: $formattedDateTime');
+        scheduledDateTime.toIso8601String().replaceAll('Z', '');
+
     DateTime dateTime = DateTime.parse(formattedDateTime);
-   
 
     await triggerNotification(dateTime, id, name);
   }
 }
 
-Future<void> triggerNotification(DateTime scheduledDateTime, int id, String name) async {
+Future<void> triggerNotification(
+    DateTime scheduledDateTime, int id, String name) async {
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: id,
@@ -47,6 +55,7 @@ Future<void> triggerNotification(DateTime scheduledDateTime, int id, String name
       second: 0,
       millisecond: 0,
       timeZone: 'Asia/Ho_Chi_Minh',
+      repeats: true,
     ),
   );
 }

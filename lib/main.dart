@@ -17,7 +17,7 @@ Future<void> main() async {
   await DBHelper.initializeDatabase();
   await SharedPreferences.getInstance();
   await initializeLocalNotifications();
-  scheduleAndCreateNotifications();
+  NotificationController.initializeAndScheduleNotifications();
   runApp(
     ChangeNotifierProvider(
       create: (context) => ThemeProvider(),
@@ -38,6 +38,7 @@ Future<void> initializeLocalNotifications() async {
     null,
     [
       NotificationChannel(
+        channelGroupKey: 'basic_channel_group',
         channelKey: 'alerts',
         channelName: 'Alerts',
         channelDescription: 'Notification tests as alerts',
@@ -50,11 +51,27 @@ Future<void> initializeLocalNotifications() async {
         ledColor: Colors.deepPurple,
       )
     ],
-    debug: false,
+    channelGroups: [
+      NotificationChannelGroup(
+          channelGroupKey: "basic_channel_group",
+          channelGroupName: "Basic Group"),
+    ],
+    debug: true,
   );
+
+  bool isAllowToNoti = await AwesomeNotifications().isNotificationAllowed();
+  if (!isAllowToNoti) {
+    AwesomeNotifications().requestPermissionToSendNotifications();
+  }
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    NotificationController.initializeAndScheduleNotifications();
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
